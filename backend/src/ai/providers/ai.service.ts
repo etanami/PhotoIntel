@@ -30,7 +30,6 @@ export class AiService {
       max_completion_tokens: 200,
     });
 
-    console.log(response.choices[0].message);
     return response.choices[0].message?.content ?? '';
   }
 

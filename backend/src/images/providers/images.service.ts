@@ -14,25 +14,24 @@ export class ImagesService {
   ) {}
 
   public async uploadToCloudinary(file: Express.Multer.File) {
+    // Upload file
     const uploadedFile = await this.cloudinary.uploadFile(file);
-    // console.log(uploadedFile);
 
+    // Extract metadata from uploaded image
     const exifData = extractExifData(file.buffer);
-    // console.log('EXIF Data:', exifData);
 
     // Image summary using AI
     const summary = await this.aiService.summarizeImage(
       exifData,
       uploadedFile.secure_url,
     );
-    console.log('Generated Summary:', summary);
 
     return {
-      message: 'File upload successful',
+      message: 'Image upload successful',
       url: uploadedFile.secure_url,
       public_id: uploadedFile.public_id,
-      exifData,
-      summary,
+      metadata: exifData,
+      image_summary: summary,
     };
   }
 }
