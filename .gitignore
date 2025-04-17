@@ -1,0 +1,30 @@
+# Global ignores
+node_modules/
+.env
+.DS_Store
+
+# NestJS build output
+/backend/dist/
+/backend/node_modules/
+/backend/*.log
+
+# Next.js build output
+/frontend/.next/
+/frontend/node_modules/
+/frontend/out/
+/frontend/*.log
+# Global ignores
+node_modules/
+.env
+.DS_Store
+
+# NestJS build output
+/backend/dist/
+/backend/node_modules/
+/backend/*.log
+
+# Next.js build output
+/frontend/.next/
+/frontend/node_modules/
+/frontend/out/
+/frontend/*.log
