@@ -15,7 +15,8 @@ datasource db {
 }
 
 model User {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  clerkId   String   @unique
   email     String   @unique
   password  String
   images    Image[]
@@ -23,7 +24,7 @@ model User {
 }
 
 model Image {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   url       String
