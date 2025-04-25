@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useState } from "react";
 import Image from "next/image";
+import { useAuth } from "@clerk/nextjs";
 
 interface Result {
   url: string;
@@ -16,6 +17,8 @@ export default function Home() {
   const [result, setResult] = useState<Result | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { getToken } = useAuth();
+
   const handleSubmit = async () => {
     if(!file) return;
 
@@ -25,14 +28,20 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/images/upload', formData);
-      console.log(response);
+      const token = await getToken();
+      const response = await axios.post('http://localhost:8000/images/upload', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      console.log('response', response);
+      console.log('token', token);
       setResult(response.data);
     } catch (error) {
       console.error(error);
       alert('Upload failed');
     } finally {
-      console.log(result);
+      console.log('result', result);
       setLoading(false);
     }
   };
