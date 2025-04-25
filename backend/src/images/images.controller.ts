@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Request,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,7 +17,9 @@ export class ImagesController {
   @UseInterceptors(
     FileInterceptor('file', { limits: { fileSize: MaxFileSize } }),
   )
-  uploadImage(@UploadedFile() file: Express.Multer.File) {
-    return this.imagesService.uploadToCloudinary(file);
+  uploadImage(@UploadedFile() file: Express.Multer.File, @Request() req) {
+    const clerkId = req.user.id;
+    console.log(req.user)
+    return this.imagesService.uploadImage(file, clerkId);
   }
 }
