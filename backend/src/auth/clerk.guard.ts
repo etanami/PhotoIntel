@@ -34,17 +34,24 @@ export class ClerkGuard implements CanActivate {
     }
 
     const token = authHeader.split(' ')[1];
+    console.log('Token:', token);
 
-    const payload: any = await new Promise((resolve, reject) => {
-      jwt.verify(token, this.getKey, {}, (err, decodedToken) => {
-        if (err) return reject(err);
-        resolve(decodedToken);
+    try {
+      const payload: any = await new Promise((resolve, reject) => {
+        jwt.verify(token, this.getKey, {}, (err, decodedToken) => {
+          if (err) {
+            console.log('Token verification error:', err); // Log any errors
+            return reject(err);
+          }
+          resolve(decodedToken);
+        });
       });
-    });
 
-    // Clerk sets user ID in sub
-    req['user'] = { userId: payload.sub };
-
-    return true;
+      req['user'] = { id: payload.sub };
+      return true;
+    } catch (error) {
+      console.log('Token validation error:', error); // Log any errors
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

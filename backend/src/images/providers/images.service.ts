@@ -6,7 +6,6 @@ import { UsersService } from 'src/users/providers/users.service';
 import { extractExifData } from 'src/utils/exif-parser';
 import { Image } from '../image.entity';
 import { Repository } from 'typeorm';
-//import { UploadImageDto } from '../dtos/upload-image-dto';
 
 @Injectable()
 export class ImagesService {
@@ -26,33 +25,40 @@ export class ImagesService {
   ) {}
 
   public async uploadImage(file: Express.Multer.File, clerkId: string) {
-    // Upload file
-    const uploadedFile = await this.cloudinary.uploadFile(file);
+    try {
+      // Upload file
+      const uploadedFile = await this.cloudinary.uploadFile(file);
 
-    // Extract metadata from uploaded image
-    const exifData = extractExifData(file.buffer);
+      // Extract metadata from uploaded image
+      const exifData = extractExifData(file.buffer);
 
-    // Image summary using AI
-    const summary = await this.aiService.summarizeImage(
-      exifData,
-      uploadedFile.secure_url,
-    );
+      // Image summary using AI
+      const summary = await this.aiService.summarizeImage(
+        exifData,
+        uploadedFile.secure_url,
+      );
 
-    // Find user
-    const user = await this.usersService.findUser(clerkId);
-    console.log(user);
+      // Find user
+      const user = await this.usersService.findUser(clerkId);
+      console.log(user);
 
-    // Save image details to DB
-    const image = await this.imageRepository.save({
-      url: uploadedFile.secure_url,
-      metadata: exifData,
-      ai_summary: summary,
-      user: user,
-    });
+      // Save image details to DB
+      const image = this.imageRepository.create({
+        url: uploadedFile.secure_url,
+        metadata: exifData,
+        aiSummary: summary,
+        user: user,
+      });
+      
+      await this.imageRepository.save(image);
 
-    return {
-      message: 'Image upload successful',
-      image,
-    };
+      return {
+        message: 'Image upload successful',
+        image,
+      };
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw new Error(`Failed to upload image: ${error.message}`);
+    }
   }
 }
