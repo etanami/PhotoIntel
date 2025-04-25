@@ -7,9 +7,18 @@ import { ConfigModule } from '@nestjs/config';
 import { AIModule } from './ai/ai.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ClerkGuard } from './auth/clerk.guard';
+import { UsersModule } from './users/users.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), CloudinaryModule, ImagesModule, AIModule],
+  imports: [
+    ConfigModule.forRoot(),
+    CloudinaryModule,
+    ImagesModule,
+    AIModule,
+    UsersModule,
+    PrismaModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
