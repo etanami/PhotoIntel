@@ -7,8 +7,8 @@ export class Image {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id'})
-  userId: number;
+  // @Column({ name: 'user_id'})
+  // userId: number;
 
   @ManyToOne(() => User, (user) => user.images)
   user: User;
@@ -17,13 +17,13 @@ export class Image {
   url: string;
 
   @Column('jsonb')
-  metadata: object;
+  metadata?: object;
 
   @Column({ nullable: true })
-  location: string;
+  location?: string;
 
   @Column({ nullable: true, name: 'ai_summary' })
-  aiSummary: string;
+  aiSummary?: string;
 
   @Column({
     type: 'timestamp',

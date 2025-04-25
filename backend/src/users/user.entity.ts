@@ -13,9 +13,6 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  password: string;
-
   @OneToMany(() => Image, (image) => image.user)
   images: Image[];
 
