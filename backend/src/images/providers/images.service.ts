@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { AiService } from 'src/ai/providers/ai.service';
 import { CloudinaryService } from 'src/cloudinary/providers/cloudinary.service';
 import { UsersService } from 'src/users/providers/users.service';
 import { extractExifData } from 'src/utils/exif-parser';
-import { UploadImageDto } from '../dtos/upload-image-dto';
-import { PrismaService } from 'prisma/prisma.service';
+import { Image } from '../image.entity';
+import { Repository } from 'typeorm';
+//import { UploadImageDto } from '../dtos/upload-image-dto';
 
 @Injectable()
 export class ImagesService {
@@ -18,8 +20,9 @@ export class ImagesService {
     // Inject usersService
     private readonly usersService: UsersService,
 
-    // Inject prisma
-    private readonly prisma: PrismaService,
+    // Inject imageRepository
+    @InjectRepository(Image)
+    private readonly imageRepository: Repository<Image>,
   ) {}
 
   public async uploadImage(file: Express.Multer.File, clerkId: string) {
@@ -36,17 +39,15 @@ export class ImagesService {
     );
 
     // Find user
-    const user = await this.usersService.findOrCreateUser(clerkId);
+    const user = await this.usersService.findUser(clerkId);
     console.log(user);
 
     // Save image details to DB
-    const image = await this.prisma.image.create({
-      data: {
-        url: uploadedFile.secure_url,
-        public_id: uploadedFile.public_id,
-        metadata: exifData,
-        image_summary: summary,
-      },
+    const image = await this.imageRepository.save({
+      url: uploadedFile.secure_url,
+      metadata: exifData,
+      ai_summary: summary,
+      user: user,
     });
 
     return {

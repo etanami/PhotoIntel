@@ -4,10 +4,16 @@ import { ImagesService } from './providers/images.service';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 import { AIModule } from 'src/ai/ai.module';
 import { UsersModule } from 'src/users/users.module';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { Image } from './image.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [CloudinaryModule, AIModule, UsersModule, PrismaModule],
+  imports: [
+    TypeOrmModule.forFeature([Image]),
+    CloudinaryModule,
+    AIModule,
+    UsersModule,
+  ],
   controllers: [ImagesController],
   providers: [ImagesService],
 })
