@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ClerkGuard } from './auth/clerk.guard';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ClerkWebhookController } from './webhooks/clerk-webhook.controller';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AIModule,
     UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ClerkWebhookController],
   providers: [
     AppService,
     {
