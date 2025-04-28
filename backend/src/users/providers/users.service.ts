@@ -12,7 +12,12 @@ export class UsersService {
   ) {}
 
   async findUser(clerkId: string) {
-    return await this.userRepository.findOne({ where: { clerkId } });
+    try {
+      return await this.userRepository.findOne({where: { clerkId } });
+    } catch (error) {
+      console.error('Error finding user:', error);
+      throw new Error('Failed to find user');
+    }
   }
 
   async createUser(userId: string, email: string, createdAt: Date) {

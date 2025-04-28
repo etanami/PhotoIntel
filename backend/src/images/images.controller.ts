@@ -8,6 +8,7 @@ import {
 import { ImagesService } from './providers/images.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaxFileSize } from './constants/max-image.filesize';
+import { User } from 'src/auth/user.decorator';
 
 @Controller('images')
 export class ImagesController {
@@ -17,9 +18,9 @@ export class ImagesController {
   @UseInterceptors(
     FileInterceptor('file', { limits: { fileSize: MaxFileSize } }),
   )
-  uploadImage(@UploadedFile() file: Express.Multer.File, @Request() req) {
-    const clerkId = req.user.id;
-    console.log(req.user)
+  uploadImage(@UploadedFile() file: Express.Multer.File, @User() user) {
+    console.log(user)
+    const clerkId = user.id;
     return this.imagesService.uploadImage(file, clerkId);
   }
 }

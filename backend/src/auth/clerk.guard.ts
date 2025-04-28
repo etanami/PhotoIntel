@@ -40,7 +40,7 @@ export class ClerkGuard implements CanActivate {
     }
 
     const token = authHeader.split(' ')[1];
-    console.log('Token:', token);
+    //console.log('Token:', token);
 
     try {
       const payload: any = await new Promise((resolve, reject) => {

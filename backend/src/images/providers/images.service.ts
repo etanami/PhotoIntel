@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AiService } from 'src/ai/providers/ai.service';
 import { CloudinaryService } from 'src/cloudinary/providers/cloudinary.service';
@@ -47,10 +47,15 @@ export class ImagesService {
         url: uploadedFile.secure_url,
         metadata: exifData,
         aiSummary: summary,
-        user: user,
+        user,
       });
       
-      await this.imageRepository.save(image);
+      try {
+        await this.imageRepository.save(image);
+      } catch (error) {
+        console.error('Error saving image to database:', error);
+        throw new InternalServerErrorException(`Failed to save image to database: ${error.message}`);
+      }
 
       return {
         message: 'Image upload successful',
