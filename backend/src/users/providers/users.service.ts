@@ -15,9 +15,9 @@ export class UsersService {
     return await this.userRepository.findOne({ where: { clerkId } });
   }
 
-  async createUser(userId: string, email: string) {
+  async createUser(userId: string, email: string, createdAt: Date) {
     try {
-      const newUser = this.userRepository.create({ clerkId: userId, email });
+      const newUser = this.userRepository.create({ clerkId: userId, email, createdAt });
       await this.userRepository.save(newUser);
       return newUser;
     } catch (error) {

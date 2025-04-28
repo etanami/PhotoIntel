@@ -27,6 +27,12 @@ export class ClerkGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
+
+    // Skip guard for webhook route
+    if (req.path.startsWith('/webhooks/clerk')) {
+      return true;
+    }
+    
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
