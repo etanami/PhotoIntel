@@ -32,7 +32,7 @@ export default function Home() {
     try {
       const token = await getToken();
       const response = await axios.post(
-        'http://localhost:8000/images/upload',
+        `${process.env.NEXT_PUBLIC_API_URL}/images/upload`,
         formData,
         {
           headers: {
@@ -40,7 +40,7 @@ export default function Home() {
           },
         }
       );
-      console.log('response', response);
+      //console.log('response', response);
       setResult(response.data);
     } catch (error) {
       console.error(error);
