@@ -25,7 +25,7 @@ import { ClerkWebhookController } from './webhooks/clerk-webhook.controller';
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
         autoLoadEntities: true,
-        synchronize: true,
+        //synchronize: true,
       }),
     }),
     CloudinaryModule,
